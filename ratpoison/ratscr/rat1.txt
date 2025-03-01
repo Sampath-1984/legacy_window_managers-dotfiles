@@ -1,0 +1,1 @@
+(frame :number 0 :x 0 :y 0 :width 683 :height 768 :screenw 1366 :screenh 768 :window 25203614 :last-access 36 :dedicated 0),(frame :number 1 :x 683 :y 0 :width 683 :height 768 :screenw 1366 :screenh 768 :window 25165834 :last-access 41 :dedicated 0)

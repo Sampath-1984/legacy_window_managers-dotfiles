@@ -1,0 +1,243 @@
+#
+# Default twm configuration file; needs to be kept small to conserve string
+# space in systems whose compilers don't handle medium-sized strings.
+#
+# Sites should tailor this file, providing any extra title buttons, menus, etc.
+# that may be appropriate for their environment.  For example, if most of the
+# users were accustomed to uwm, the defaults could be set up not to decorate
+# any windows and to use meta-keys.
+#
+
+NoGrabServer	#Don't grab the server when not needed
+NoDefaults	#No default keybinds or pixmaps
+RestartPreviousState	#Try to restart defaults from last x session
+DecorateTransients	#Also decorate transient windows
+RandomPlacement	#Randomly place windows without geometry, instead of asking the user for input
+DontMoveOff	#Windows can't move outside the screen
+#ShowIconManager	#Shows the icon manager at the stat of twm
+TitleFont "-misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0"
+ResizeFont "-misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0"
+MenuFont "-misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0"
+IconFont "-misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0"
+IconManagerFont "-misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0"
+#OpaqueMove	#Moves windows directly instead of showing an outline of them
+#ClientBorderWidth
+
+BorderWidth 1 # Number of pixels for entire window border
+
+Color
+{
+    BorderColor "black"
+    BorderTileForeground "black"
+    BorderTileBackground "white"
+    DefaultBackground "rgb:ff/ff/ff"
+    DefaultForeground "black"
+    TitleBackground "white"
+    TitleForeground "black"
+    #TitlePadding 13
+    MenuBackground "white"
+    MenuForeground "black"
+    MenuBorderColor "black"
+    MenuTitleBackground "black"
+    MenuTitleForeground "white"
+    IconBackground "white"
+    IconForeground "black"
+    IconBorderColor "black"
+    IconManagerBackground "white"
+    IconManagerForeground "black"
+}
+
+Pixmaps {
+	TitleHighlight "~/twm-scripts/horz.xbm"
+}
+
+NoTitle {
+#"aterm"
+"conky"
+#"xclock"
+"xmessage"
+"TWM Icon Manager"
+"xfce4-panel"
+"polybar"
+}
+
+#AutoRaise {
+#"alacritty"
+#}
+
+#NoTitle
+#NoTitleHighlight
+#SqueezeTitle
+#NoIconManagers
+
+IconManagerGeometry "300x1150+0+28" 1
+IconRegion "800x800+0+28" north west 0 0
+
+IconifyByUnmapping	#wont show any free icons, an optional window list can be provided
+
+IconManagerDontShow {
+"conky"
+"xfce4-panel"
+"polybar-example_eDP-1"
+}
+
+#WINDOW TITLEBAR BUTTONS
+LeftTitleButton ":dot"=f.iconify
+#LeftTitleButton ":delete"=f.delete
+RightTitleButton ":menu" = f.menu "winops1"
+RightTitleButton ":resize"=f.resize
+#RightTitleButton "menu12" = f.fullzoom
+
+
+# Left click on desktop to bring up window list
+#Button3 = : root : f.menu "TwmWindows"
+
+# Hold Alt and Tab cycles through windows bringing up focus
+Function "winup" { f.circleup }
+"Tab" = m : root|window|frame|title : f.function "winup"
+#"Tab" = m : root : f.function "winup"
+"k" = m4 : window|title : f.delete
+"q" = m4 : window|title : f.fullzoom
+
+
+#
+# Define some useful functions for motion-based actions.
+#
+MoveDelta 3
+Function "move-or-lower" { f.move f.deltastop f.lower }
+Function "move-or-raise" { f.move f.deltastop f.raise }
+Function "move-or-iconify" { f.move f.deltastop f.iconify }
+
+#
+# Set some useful bindings.  Sort of uwm-ish, sort of simple-button-ish
+#
+#Button1 = : root : f.menu "defops"
+Button1 = : root : f.menu "def"
+Button3 = : root : f.menu "powops"
+
+#Button1 = m : window|icon : f.function "move-or-lower"
+#Button2 = m : window|icon : f.iconify
+#Button3 = m : window|icon : f.function "move-or-raise"
+
+Button1 = : title : f.function "move-or-raise"
+Button3 = : title : f.menu "winops1"
+#Button2 = : title : f.raiselower
+
+Button1 = : icon : f.function "move-or-iconify"
+Button2 = : icon : f.iconify
+
+Button1 = : iconmgr : f.iconify
+Button2 = : iconmgr : f.iconify
+
+#
+# And a menus with the usual things
+#
+menu "defops"
+{
+"Twm"	f.title
+"Iconify"	f.iconify
+"Resize"	f.resize
+"Move"		f.move
+"Raise"		f.raise
+"Lower"		f.lower
+""		f.nop
+"Focus"		f.focus
+"Unfocus"	f.unfocus
+"Show Iconmgr"	f.showiconmgr
+"Hide Iconmgr"	f.hideiconmgr
+""		f.nop
+"Xterm"		f.exec "exec xterm &"
+"Alacritty"	f.exec "exec alacritty &"
+"Sakura"	f.exec "exec sakura &"
+""		f.nop
+"Kill"		f.destroy
+"Delete"	f.delete
+""		f.nop
+"Restart"	f.restart
+"Exit"		f.quit
+}
+
+menu "def"
+{
+"Menu"		f.title
+"Termnial"	f.exec "exec sakura &"
+"Launcher"	f.exec "exec rofi -show drun &"
+"Shortcuts"	f.menu "shortcuts"
+"Desktops"	f.menu "desktops"
+"WinOps"	f.menu "winops0"
+"Refresh"	f.refresh
+"ScreenGrab"	f.menu "screen"
+"IconManager"	f.menu "iconmanager"
+}
+
+menu "shortcuts"
+{
+"FileManager"	f.exec "exec nemo &"
+"WebBrowser"	f.exec "exec brave &"
+"NetworkManager"	f.exec "exec sakura --class nmtui-term -e nmtui connect &"
+"Music"		f.exec "exec rhythmbox &"
+"BluetoothManager"	f.exec "exec blueman-manager &"
+}
+
+menu "desktops"
+{
+"Desktop 1"	f.exec "exec vdesk 1"
+"Desktop 2"	f.exec "exec vdesk 2"
+"Desktop 3"	f.exec "exec vdesk 3"
+"Desktop 4"	f.exec "exec vdesk 4"
+"Desktop 5"	f.exec "exec vdesk 5"
+}
+
+menu "winops0"
+{
+"Info"		f.identify
+"Raise"		f.raise
+"Lower"		f.lower
+"Focus"		f.focus
+"Unfocus"	f.unfocus
+"Restart"	f.restart
+}
+
+menu "screen"
+{
+"Screenshot"	f.exec "exec scrot -F ~/Pictures/Screenshots/'%Y-%m-%d_%H:%M:%S.png' & notify-send Screenshot! taken -i video-display"
+}
+
+menu "iconmanager"
+{
+"ShowIconManager"	f.showiconmgr
+"HideIconManager"	f.hideiconmgr
+}
+
+menu "winops1"
+{
+"WinOps"	f.title
+"Zoom"		f.fullzoom
+"Iconify"	f.iconify
+"Close"		f.delete
+""		f.nop
+"Focus"		f.focus
+"Unfocus"	f.unfocus
+"Lower"		f.lower
+"Raise"		f.raise
+""		f.nop
+"Kill"		f.destroy
+}
+
+menu "powops"
+{
+"Menu"		f.title
+""		f.nop
+"Battery"	f.menu "batops"
+""		f.nop
+"Exit"		f.quit
+"Shutdown"	f.exec "exec shutdown -h now"
+"Restart"	f.exec "exec reboot"
+}
+
+menu "batops"
+{
+"PowerSaver"	f.exec "exec powerprofilesctl set power-saver"
+"Balanced"	f.exec "exec powerprofilesctl set balanced"
+"Performance"	f.exec "exec powerprofilesctl set performance"
+}

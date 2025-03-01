@@ -1,0 +1,103 @@
+#mask1=super
+#mask2=ctrl+alt
+
+term alacritty
+bw 1
+snap 5
+
+app Notification-d
+geometry +0+0
+app xclock
+dock
+fixed
+geometry +1226+0
+app xosview
+dock
+fixed
+geometry 174x322+0+444
+app ipager
+dock
+fixed
+app synapse
+geometry 563x100+407+1
+app gnome-screenshot
+geometry 418x340+472+0
+app Alacritty
+geometry 680x381+685+386
+app nmtui-term
+geometry 546x766+1+1
+app brave-browser
+vdesk 1
+app spotify
+vdesk 7
+geometry 1366x768+0+0
+app lollypop
+vdesk 7
+geometry 1366x768+0+0
+
+mask1 mod1+control
+mask2 mod4
+altmask shift
+
+
+bind button1=move
+bind button2=lower
+bind button3=resize
+
+bind mask1+Return=spawn
+
+bind mask1+Escape=delete
+bind mask1+altmask+Escape=kill
+bind mask2+k=delete
+bind mask2+altmask+k=kill
+
+bind mask1+Insert=lower
+bind mask1+KP_Insert=lower
+bind mask1+i=info
+
+bind mask2+Tab=next
+bind mod1+Tab=next
+
+bind mask1+h=move,relative+left
+bind mask1+j=move,relative+down
+bind mask1+k=move,relative+up
+bind mask1+l=move,relative+right
+bind mask1+y=move,top+left
+bind mask1+u=move,top+right
+bind mask1+b=move,bottom+left
+bind mask1+n=move,bottom+right
+bind mask1+altmask+h=resize,relative+left
+bind mask1+altmask+j=resize,relative+down
+bind mask1+altmask+k=resize,relative+up
+bind mask1+altmask+l=resize,relative+right
+bind mask1+equal=resize,toggle+v
+bind mask1+altmask+equal=resize,toggle+h
+
+bind mask1+x=resize,toggle+v+h
+bind mask1+d=dock,toggle
+bind mask1+f=fix,toggle
+bind mask2+q=resize,toggle+v+h
+bind mask2+d=dock,toggle
+bind mask2+i=fix,toggle
+
+bind mask1+1=vdesk,0
+bind mask1+2=vdesk,1
+bind mask1+3=vdesk,2
+bind mask1+4=vdesk,3
+bind mask1+5=vdesk,4
+bind mask1+6=vdesk,5
+bind mask1+7=vdesk,6
+bind mask1+8=vdesk,7
+bind mask1+a=vdesk,toggle
+bind mask2+1=vdesk,0
+bind mask2+2=vdesk,1
+bind mask2+3=vdesk,2
+bind mask2+4=vdesk,3
+bind mask2+5=vdesk,4
+bind mask2+6=vdesk,5
+bind mask2+7=vdesk,6
+bind mask2+8=vdesk,7
+bind mask2+a=vdesk,toggle
+
+bind mask1+Left=vdesk,relative+down
+bind mask1+Right=vdesk,relative+up

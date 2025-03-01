@@ -1,0 +1,16 @@
+Xmessage*background: white
+Xmessage*foreground: black
+Xmessage*font:  -misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0
+
+xterm*background: white
+xterm*foreground: black
+xterm*font:  -misc-vhs gothic-medium-r-normal--0-0-0-0-p-0-ascii-0
+!xterm*faceName: Dejavu Sans Mono
+!xterm*faceSize: 14
+
+xclock*background: white
+xclock*foreground: black
+
+xosview*background: white
+xosview*foreground: black
+xosview*font: 6x13

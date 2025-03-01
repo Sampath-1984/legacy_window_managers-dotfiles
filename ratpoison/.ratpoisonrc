@@ -1,0 +1,166 @@
+#	mapping windows key as escape
+exec xmodmap -e "keycode 133 = F30"
+escape F30
+
+#	autostarts
+#exec xsettingsd (lightweight version of gnome-settings-daemon; too hard to configure)
+#exec export GTK_THEME=Adwaita:dark
+#exec gsettings set org.gnome.desktop.interface gtk-theme Adwaita:dark
+#	THE SETENV LINES BELOW ABSOLUTELY WORK!!!
+setenv GTK_THEME Adwaita:dark
+setenv ICON_THEME Obsidian
+#exec xrdb load ~/.Xresources
+#exec xbindkeys
+exec /home/sampath/ratscr/theme.sh
+exec nitrogen --restore
+exec xcompmgr
+exec xsetroot -cursor_name left_ptr
+exec bash ~/ratscr/bat-mon.sh
+exec bash ~/ratscr/scrfltr.sh
+exec sleep 0.8 && synapse
+exec echo "(frame :number 0 :x 0 :y 0 :width 1366 :height 768 :screenw 1366 :screenh 768 :window 0 :last-access 1 :dedicated 0)" | tee ~/ratscr/rat.txt ~/ratscr/rat1.txt ~/ratscr/rat2.txt ~/ratscr/rat3.txt
+#exec echo "import = [ \"~/.config/alacritty/config.toml\", ]" > ~/.alacritty.toml
+#	tray_on_the_desktop
+#unmanage stalonetray
+#exec stalonetray
+#exec dropbox
+#exec nm-applet
+#exec spotify
+
+#	no need for xbindkeys as I have written it's functions in this file itself with the help of 'definekey'
+#	get "gradience" to tweak gtk theming
+#exec gnome-settings-daemon (for GNOME)(legacy: doesn't work anymore as of 2024)
+#exec xfsettingsd (for xfce)
+
+#	displaying xmessage as notifications and using program name instead of window title
+#	The above statement is no longer valid, as this file has been rewritten to use the 'ratpoison echo' instead
+#	still the xmessage should be unmanaged as the battery low notification still depends on xmessage
+unmanage xmessage
+unmanage xpilot
+unmanage allegro
+set winname name
+# set winname title (or) set winname class
+
+#workspaces
+
+bind d save-f
+alias save-f exec ratpoison -c "fdump" | awk '{if (NR!=1) {print}}' > ~/ratscr/rat.txt && ratpoison -c "echo Configuration: Saved"
+bind D load-f
+alias load-f exec ratpoison -c "frestore $(cat ~/ratscr/rat.txt)"
+
+bind M-exclam save_frames1
+alias save_frames1 exec ratpoison -c "fdump" | awk '{if (NR!=1) {print}}' > ~/ratscr/rat1.txt
+bind C-M-1 load_frames1
+alias load_frames1 exec ratpoison -c "frestore $(cat ~/ratscr/rat1.txt)"
+bind M-at save_frames2
+alias save_frames2 exec ratpoison -c "fdump" | awk '{if (NR!=1) {print}}' > ~/ratscr/rat2.txt
+bind C-M-2 load_frames2
+alias load_frames2 exec ratpoison -c "frestore $(cat ~/ratscr/rat2.txt)"
+bind M-numbersign save_frames3
+alias save_frames3 exec ratpoison -c "fdump" | awk '{if (NR!=1) {print}}' > ~/ratscr/rat3.txt
+bind C-M-3 load_frames3
+alias load_frames3 exec ratpoison -c "frestore $(cat ~/ratscr/rat3.txt)"
+#
+#will implement workspaces later if need be --> {update} done implementinng workspaces
+#
+exec /usr/bin/rpws init 3 -k
+alias save-w exec ratpoison -c "save_frames$(rpws current | awk '{if (NR!=1) {print}}')"
+bind M-1 Workspace-1 
+alias Workspace-1 exec ratpoison -c "save-w" && rpws 1 && ratpoison -c "load_frames1"
+bind M-2 Workspace-2
+alias Workspace-2 exec ratpoison -c "save-w" && rpws 2 && ratpoison -c "load_frames2"
+bind M-3 Workspace-3
+alias Workspace-3 exec ratpoison -c "save-w" && rpws 3 && ratpoison -c "load_frames3"
+bind grave groups
+bind M-grave gmove
+#
+#frame-layouts#[|] [-] [|-] [+]
+#
+bind C-1 Layout-1
+alias Layout-1 exec ratpoison -c "select -" -c "only" -c "hsplit" -c "next"
+bind C-2 Layout-2
+alias Layout-2 exec ratpoison -c "select -" -c "only" -c "vsplit" -c "next"
+bind C-3 Layout-3
+alias Layout-3 exec ratpoison -c "select -" -c "only" -c "hsplit" -c "next" -c "focusright" -c "next" -c "vsplit" -c "next"
+bind C-4 Layout-4
+alias Layout-4 exec ratpoison -c "select -" -c "only" -c "hsplit" -c next -c "vsplit" -c next -c "focusright" -c next -c "vsplit" -c "next"
+#frame-layouts
+
+#meta-shortcuts
+definekey top XF86AudioMute exec pactl set-sink-mute 0 toggle && sleep 0.2 && ratpoison -c "echo $(echo -e "Volume Level: $(amixer sget Master | awk -F"[][]" '/Left:/ { print $2 }') \nmute $(pamixer --get-mute)")"
+definekey top XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% && sleep 0.2 && ratpoison -c "echo $(echo -e "Volume Level: $(amixer sget Master | awk -F"[][]" '/Left:/ { print $2 }') \nmute $(pamixer --get-mute)")"
+definekey top XF86AudioLowerVolume exec pactl set-sink-volume 0 -5% && sleep 0.2 && ratpoison -c "echo $(echo -e "Volume Level: $(amixer sget Master | awk -F"[][]" '/Left:/ { print $2 }') \nmute $(pamixer --get-mute)")"
+definekey top XF86MonBrightnessUp exec backlight_control +3 && sleep 0.2 && ratpoison -c "echo $(echo -e  "Brightness: $(cat /sys/class/backlight/radeon_bl0/actual_brightness) nits \nMaximum is $(cat /sys/class/backlight/radeon_bl0/max_brightness) nits")"
+definekey top XF86MonBrightnessDown exec backlight_control -3 && sleep 0.2 && ratpoison -c "echo $(echo -e  "Brightness: $(cat /sys/class/backlight/radeon_bl0/actual_brightness) nits \nMaximum is $(cat /sys/class/backlight/radeon_bl0/max_brightness) nits")"
+definekey top S-XF86MonBrightnessUp exec blugon -S +250
+definekey top S-XF86MonBrightnessDown exec blugon -S -250
+definekey top Print exec gnome-screenshot -i
+definekey top C-M-Delete exec ratpoison -c quit
+
+
+#shortcuts
+bind S-M-F4 shutdown
+bind f search
+bind e file-manager
+bind h browser
+bind j wifi
+bind y battery-status
+bind t date
+bind o music
+bind O spotify
+bind slash media-info
+#media-keys
+unbind p
+unbind P
+
+bind p p_play-pause
+bind P p_stop
+bind bracketright p_next
+bind bracketleft p_previous
+
+alias p_play-pause exec playerctl play-pause
+alias p_stop exec playerctl stop
+alias p_next exec playerctl next
+alias p_previous exec playerctl previous
+
+#quality_of_life
+bind semicolon colon
+bind g screen-lock
+bind z blue-light_filter
+bind Z no_blue-light_filter
+
+#unbinding binding
+bind Escape abort
+
+unbind c
+bind c terminal
+
+unbind C-c
+bind C-c terminal
+
+bind q only
+
+unbind a 
+bind a calendar
+
+#theming
+set fgcolor white
+set bgcolor black
+set border 0
+
+#aliases
+alias terminal exec alacritty 
+alias search exec synapse
+alias browser exec brave & ratpoison -c "echo Opening Brave browser..."
+alias file-manager verbexec nemo
+alias shutdown exec ratpoison -c "echo Shutting Down... Bye" & sleep 2.5 && shutdown -h now
+alias wifi exec nmcli device wifi rescan & alacritty -e nmtui connect & sleep 0.8s && ratpoison -c "echo Wifi is $(nmcli radio wifi)"
+alias battery-status exec ratpoison -c "echo Battery: "$(cat /sys/class/power_supply/BAT1/capacity)"% : $(cat /sys/class/power_supply/BAT1/status)"
+alias date exec ratpoison -c "echo $(echo -e "The time is $(date +"%I:%M %p") \n$(date +%A)")"
+alias screen-lock exec alock -bg shade:blur=75
+alias calendar exec ratpoison -d :0.0 -c "echo `date +'%r - %A %n    %d/%m/%y - %B'`  `cal | tail -n +2 | sed -e 's/^Su/\n\n Su/' -e 's/.*/ & /' -e \"s/\ $(date +%e)\ /\<$(date +%e)\>/\"`"
+alias spotify exec spotify & ratpoison -c "echo Firing up Spotify..."
+alias music verbexec lollypop
+alias blue-light_filter exec blugon -o --setcurrent=3400 & ratpoison -c "echo Blue-light filter: ON"
+alias no_blue-light_filter exec blugon -o --setcurrent=6600 & ratpoison -c "echo Blue-light filter: OFF"
+alias media-info exec ratpoison -c "echo $(echo "\"$(playerctl metadata title)\" from \"$(playerctl metadata album)\" by $(playerctl metadata artist)")"
